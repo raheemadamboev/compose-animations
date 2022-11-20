@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.animateInt
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
@@ -35,7 +38,8 @@ class Main : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 //                    AnimatedVisibilityDemo()
-                    AnimateAsStateDemo()
+//                    AnimateAsStateDemo()
+                    UpdateTransitionDemo()
                 }
             }
         }
@@ -95,6 +99,48 @@ class Main : ComponentActivity() {
                     .size(200.dp)
                     .clip(RoundedCornerShape(percent = borderRadius))
                     .background(Color.Red)
+            )
+        }
+    }
+
+    @Composable
+    fun UpdateTransitionDemo() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            var round by remember { mutableStateOf(false) }
+            val transition = updateTransition(
+                targetState = round,
+                label = null
+            )
+            val borderRadius by transition.animateInt(
+                transitionSpec = { tween(durationMillis = 2_000) },
+                label = "borderRadius",
+                targetValueByState = { rounded ->
+                    if (rounded) 100 else 0
+                }
+            )
+            val color by transition.animateColor(
+                transitionSpec = { tween(durationMillis = 1_000) },
+                label = "color",
+                targetValueByState = { rounded ->
+                    if (rounded) Color.Green else Color.Red
+                }
+            )
+
+            Button(
+                onClick = {
+                    round = !round
+                }
+            ) {
+                Text(text = stringResource(id = R.string.toggle))
+            }
+            Box(
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(percent = borderRadius))
+                    .background(color)
             )
         }
     }
