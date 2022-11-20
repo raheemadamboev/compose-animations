@@ -3,11 +3,8 @@ package xyz.teamgravity.composeanimations
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColor
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +34,8 @@ class Main : ComponentActivity() {
 //                    AnimatedVisibilityDemo()
 //                    AnimateAsStateDemo()
 //                    UpdateTransitionDemo()
-                    InfiniteTransitionDemo()
+//                    InfiniteTransitionDemo()
+                    AnimatedContentDemo()
                 }
             }
         }
@@ -159,5 +157,41 @@ class Main : ComponentActivity() {
                 .size(200.dp)
                 .background(color)
         )
+    }
+
+    @OptIn(ExperimentalAnimationApi::class)
+    @Composable
+    fun AnimatedContentDemo() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            var visible by remember { mutableStateOf(false) }
+
+            Button(
+                onClick = {
+                    visible = !visible
+                }
+            ) {
+                Text(text = stringResource(id = R.string.toggle))
+            }
+            AnimatedContent(
+                targetState = visible,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1F),
+                content = { cVisible ->
+                    if (cVisible) {
+                        Box(modifier = Modifier.background(Color.Green))
+                    } else {
+                        Box(modifier = Modifier.background(Color.Red))
+                    }
+
+                },
+                transitionSpec = {
+                    slideInHorizontally(initialOffsetX = { if (visible) it else -it }) with slideOutHorizontally(targetOffsetX = { if (visible) -it else it })
+                }
+            )
+        }
     }
 }
