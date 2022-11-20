@@ -5,10 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.animateInt
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
@@ -39,7 +36,8 @@ class Main : ComponentActivity() {
                 ) {
 //                    AnimatedVisibilityDemo()
 //                    AnimateAsStateDemo()
-                    UpdateTransitionDemo()
+//                    UpdateTransitionDemo()
+                    InfiniteTransitionDemo()
                 }
             }
         }
@@ -143,5 +141,23 @@ class Main : ComponentActivity() {
                     .background(color)
             )
         }
+    }
+
+    @Composable
+    fun InfiniteTransitionDemo() {
+        val transition = rememberInfiniteTransition()
+        val color by transition.animateColor(
+            initialValue = Color.Red,
+            targetValue = Color.Green,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 2_000),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .background(color)
+        )
     }
 }
