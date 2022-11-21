@@ -2,7 +2,7 @@
 
 <img align="right" width="296" height="600"  src="https://github.com/raheemadamboev/compose-animations/blob/master/banner.gif" />
 
-A simple app that demonstrates various ways of animations in Jetpack Compose.
+A simple app that demonstrates various ways of making animations in Jetpack Compose.
 
 **Compose Animations**
 
