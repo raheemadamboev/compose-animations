@@ -189,7 +189,7 @@ class Main : ComponentActivity() {
 
                 },
                 transitionSpec = {
-                    slideInHorizontally(initialOffsetX = { if (targetState) it else -it }) with slideOutHorizontally(targetOffsetX = { if (visible) -it else it })
+                    slideInHorizontally(initialOffsetX = { if (targetState) it else -it }) with slideOutHorizontally(targetOffsetX = { if (targetState) -it else it })
                 }
             )
         }
